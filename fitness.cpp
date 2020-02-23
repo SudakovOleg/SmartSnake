@@ -12,7 +12,7 @@ Fitness::Fitness(QWidget *parent) :
   ui->PopulationSizeSB->setRange(2,100);
   ui->SizeGenSB->setRange(5, 100000);
   ui->MutChanceSB->setRange(1, 100);
-  ui->DeskSizeSB->setRange(5,100);
+  ui->DeskSizeSB->setRange(25,100);
   ui->progressBar->setRange(0,100);
   ui->progressBar->setValue(0);
 }
@@ -24,5 +24,15 @@ Fitness::~Fitness()
 
 void Fitness::on_StartBatton_clicked()
 {
+  if(!workStatus)
+  {
+    board = new Board(this, ui->DeskSizeSB->value());
+    ui->DeskLay->addWidget(board);
+    //Snake
+    workStatus = true;
+  }
+  else
+  {
 
+  }
 }

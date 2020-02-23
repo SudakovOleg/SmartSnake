@@ -2,6 +2,7 @@
 #define FITNESS_H
 
 #include <QMainWindow>
+#include "deskwnd.h"
 
 namespace Ui {
   class Fitness;
@@ -22,6 +23,8 @@ private:
   Ui::Fitness *ui;
   int PopulationSize = 2;
   int SizeGen = 5;
+  Board* board;
+  bool workStatus = false;
 };
 
 #endif // FITNESS_H
