@@ -27,7 +27,7 @@ private:
   int SizeGen = 5;
   Board* board;
   bool workStatus = false;
-  Snake* snake;
+  Snake** snake;
 };
 
 #endif // FITNESS_H

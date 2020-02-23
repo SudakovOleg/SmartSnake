@@ -28,12 +28,18 @@ SOURCES += \
         deskwnd.cpp \
         main.cpp \
         fitness.cpp \
-        snake.cpp
+        matrix.cpp \
+        network.cpp \
+        snake.cpp \
+        vector.cpp
 
 HEADERS += \
         deskwnd.h \
         fitness.h \
-        snake.h
+        matrix.h \
+        network.h \
+        snake.h \
+        vector.h
 
 FORMS += \
         deskwnd.ui \

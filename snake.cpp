@@ -1,9 +1,18 @@
 #include "snake.h"
+#include "vector.h"
+#include "matrix.h"
+#include "network.h"
 
 Snake::Snake(const int *_sizesNet, int _layersNet, int _board_size, Board* _board, mutation _mut, int ChanceMut)
 {
-Q_UNUSED(_sizesNet);
-Q_UNUSED(_layersNet);
+int _sizes[_layersNet + 2];
+_sizes[0] = 10;
+_sizes[_layersNet + 1] = 4;
+for(int i(1); i < _layersNet + 1; i++)
+{
+    _sizes[i] = _sizesNet[i-1];
+}
+brain = new Network(_sizes,_layersNet + 2);
 board_size = _board_size;
 board = _board;
 mut = _mut;
@@ -196,6 +205,32 @@ void Snake::turn()
     board->clear();
     burnOnBord();
   }
+
+  Vector newDir = brain->LifeStep(eye());
+  int answer;
+  double max = -100;
+  for(int i(0); i < newDir.size(); i++)
+      if(newDir.at(i) > max)
+      {
+        max = newDir.at(i);
+        answer = i + 1;
+      }
+  switch (answer)
+  {
+    case 0:
+      directionNext = UP;
+      break;
+    case 1:
+      directionNext = LEFT;
+      break;
+    case 2:
+      directionNext = DOWN;
+      break;
+    case 3:
+      directionNext = RIGHT;
+      break;
+  }
+
 }
 
 //Включить вывод
@@ -206,7 +241,125 @@ void Snake::show()
 //Выключить вывод
 void Snake::hide()
 {
-  isShow - false;
+  isShow = false;
+}
+
+//Изменение весов путем скрещивания двух особей
+void Snake::cross(Snake *first_parent, Snake *second_parent)
+{
+//Скрещивание
+  for (int i(0); i < brain->getLayersN(); i++)
+  {
+    for (int x(0); x < brain->weights[i]->n; x++)
+    {
+      for(int y(0); y < brain->weights[i]->m; y++)
+      {
+        if(brain->weights[i]->m%2 == 0)
+        {
+          brain->weights[i]->at(x,y) = first_parent->brain->weights[i]->at(x,y);
+        }
+        else
+        {
+          brain->weights[i]->at(x,y) = second_parent->brain->weights[i]->at(x,y);
+        }
+      }
+    }
+  }
+//Мутация
+  if(rand()%100 < mutChance)
+    switch (mut)
+    {
+      case GEN_MUT:
+        {
+          genMut();
+          break;
+        }
+      case X_CROSS:
+        {
+          xcrossMut();
+          break;
+        }
+      case ALL_MUT:
+        {
+          allMut();
+          break;
+        }
+    }
+}
+
+//Зрение
+Vector &Snake::eye()
+{
+  auto* see = new Vector(10);
+
+  int count = 0;
+  see->at(count++) = cells->at(0).x;
+  see->at(count++) = cells->at(0).y;
+  see->at(count++) = board_size - cells->at(0).x;
+  see->at(count++) = board_size - cells->at(0).y;
+  see->at(count++) = apple->x - cells->at(0).x;
+  see->at(count++) = apple->y - cells->at(0).y;
+  see->at(count) = 0;
+  //Up
+  for (int i(cells->at(0).y); i >= 0; i--)
+  {
+    bool flagBreak = false;
+    for (int body(1); body < cells->size();body++)
+      if(cells->at(body).x == cells->at(0).y && cells->at(body).y == i)
+      {
+        flagBreak = true;
+        break;
+      }
+    see->at(count)++;
+    if(flagBreak)
+      break;
+  }
+  see->at(++count) = 0;
+  //Right
+  for (int i(cells->at(0).x); i < board_size; i++)
+  {
+    bool flagBreak = false;
+    for (int body(1); body < cells->size();body++)
+      if(cells->at(body).x == i && cells->at(body).y == cells->at(0).y)
+      {
+        flagBreak = true;
+        break;
+      }
+    see->at(count)++;
+    if(flagBreak)
+      break;
+  }
+  see->at(++count) = 0;
+  //Down
+  for (int i(cells->at(0).y); i < board_size; i++)
+  {
+    bool flagBreak = false;
+    for (int body(1); body < cells->size();body++)
+      if(cells->at(body).x == cells->at(0).y && cells->at(body).y == i)
+      {
+        flagBreak = true;
+        break;
+      }
+    see->at(count)++;
+    if(flagBreak)
+      break;
+  }
+  see->at(++count) = 0;
+  //Left
+  for (int i(cells->at(0).x); i >= 0; i--)
+  {
+    bool flagBreak = false;
+    for (int body(1); body < cells->size();body++)
+      if(cells->at(body).x == i && cells->at(body).y == cells->at(0).y)
+      {
+        flagBreak = true;
+        break;
+      }
+    see->at(count)++;
+    if(flagBreak)
+      break;
+  }
+  return *see;
 }
 
 //Метод для вывода данных на поле
@@ -216,5 +369,38 @@ void Snake::burnOnBord()
   for(auto body_cell : *cells)
   {
     board->burn(body_cell.x, body_cell.y, "red");
+  }
+}
+
+void Snake::xcrossMut()
+{
+
+}
+
+void Snake::genMut()
+{
+  int placeX, placeY, placeZ;
+  placeZ = rand()%brain->getLayersN();
+  placeX = rand()%brain->weights[placeZ]->n;
+  placeY = rand()%brain->weights[placeZ]->m;
+  if(rand()%2 == 0)
+  {
+    brain->weights[placeZ]->at(placeX,placeY) = 0.01*(double)(rand()%100);
+  }
+  else
+  {
+    brain->weights[placeZ]->at(placeX,placeY) = -0.01*(double)(rand()%100);
+  }
+}
+
+void Snake::allMut()
+{
+  if(rand()%2 == 0)
+  {
+    genMut();
+  }
+  else
+  {
+    xcrossMut();
   }
 }

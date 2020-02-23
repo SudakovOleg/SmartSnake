@@ -3,6 +3,8 @@
 
 #include <QList>
 #include "deskwnd.h"
+#include "vector.h"
+#include "network.h"
 
 struct cell
 {
@@ -20,17 +22,17 @@ enum directon
 
 enum mutation
 {
-  XCross,
-  GenMut,
-  AllMut
+  X_CROSS,
+  GEN_MUT,
+  ALL_MUT
 };
 
 class Snake
 {
 public:
-  Snake(const int* _sizesNet, int _layersNet,
+  Snake(const int *_sizesNet, int _layersNet,
         int _board_size, Board* board = nullptr,
-        mutation = AllMut, int ChanceMut = 15);
+        mutation = ALL_MUT, int ChanceMut = 15);
   ~Snake();
   void start();
   bool isGameOver();
@@ -38,13 +40,19 @@ public:
   void turn();
   void show();
   void hide();
+  void cross(Snake* first_parent, Snake* second_parent);
+
+  Network* brain;
 private:
+  Vector &eye();
   bool isBack(directon);
   void directionChange();
   void generateApple();
   bool isEat();
   void burnOnBord();
-
+  void xcrossMut();
+  void genMut();
+  void allMut();
   mutation mut;
   int mutChance;
   int board_size;
