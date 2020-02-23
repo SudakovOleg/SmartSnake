@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "deskwnd.h"
+#include "snake.h"
 
 namespace Ui {
   class Fitness;
@@ -14,6 +15,7 @@ class Fitness : public QMainWindow
 
 public:
   explicit Fitness(QWidget *parent = nullptr);
+  void life();
   ~Fitness();
 
 private slots:
@@ -25,6 +27,7 @@ private:
   int SizeGen = 5;
   Board* board;
   bool workStatus = false;
+  Snake* snake;
 };
 
 #endif // FITNESS_H

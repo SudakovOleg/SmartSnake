@@ -27,11 +27,13 @@ CONFIG += c++11
 SOURCES += \
         deskwnd.cpp \
         main.cpp \
-        fitness.cpp
+        fitness.cpp \
+        snake.cpp
 
 HEADERS += \
         deskwnd.h \
-        fitness.h
+        fitness.h \
+        snake.h
 
 FORMS += \
         deskwnd.ui \

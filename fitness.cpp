@@ -28,11 +28,23 @@ void Fitness::on_StartBatton_clicked()
   {
     board = new Board(this, ui->DeskSizeSB->value());
     ui->DeskLay->addWidget(board);
-    //Snake
+    snake = new Snake(nullptr, 0, ui->DeskSizeSB->value(), board);
+    snake->show();
     workStatus = true;
+    snake->start();
+    life();
   }
   else
   {
 
+  }
+}
+
+void Fitness::life()
+{
+  while (workStatus && !snake->isGameOver())
+  {
+    snake->turn();
+    QApplication::processEvents();
   }
 }
