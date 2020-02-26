@@ -15,7 +15,7 @@ Network::Network(int* _sizes, int _layersN)
   srand(QApplication::applicationPid());
 }
 
-Vector &Network::Forward(Vector *_input, int lay)
+Vector Network::Forward(Vector _input, int lay)
 {
     if(lay < layersN)
     {
@@ -26,19 +26,28 @@ Vector &Network::Forward(Vector *_input, int lay)
         long double y = 0;
 
         for(int j(0); j < weights[lay]->m; j++)
-          y += weights[lay]->at(i,j) * _input->at(j);
+          y += weights[lay]->at(i,j) * _input.at(j);
 
-        double temp = 1/(1+exp(-y));
-        output[i] = temp;
+        double temp = 1/(1+std::abs(y));
+        output.at(i) = temp;
       }
-      return Forward(&output, ++lay);
+      return Forward(output, ++lay);
     }
-    return *_input;
+    return _input;
 }
 
-Vector Network::LifeStep(Vector _inp)
+int Network::LifeStep(const Vector& _inp)
 {
-  return Forward(&_inp);
+  Vector newDir = Forward(_inp);
+  int answer;
+  double max = -100;
+  for(int i(0); i < newDir.size(); i++)
+      if(newDir.at(i) > max)
+      {
+        max = newDir.at(i);
+        answer = i + 1;
+      }
+  return answer;
 }
 
 int Network::getLayersN()

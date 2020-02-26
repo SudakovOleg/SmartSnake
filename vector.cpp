@@ -1,17 +1,17 @@
 #include "vector.h"
 #include <iostream>
 
-Vector::Vector(int _lenght)
+Vector::Vector(int  _lenght)
 {
-  this->lenght = _lenght;
-  vectr = new double[_lenght];
+  for (int i(0); i < _lenght; i++)
+  {
+   vectr.push_back(0);
+  }
 }
 
 Vector::Vector(const double *_values, int _size)
 {
-  this->lenght = _size;
-  vectr = new double[lenght];
-  for (int i(0); i < lenght; i++)
+  for (int i(0); i < _size; i++)
   {
     vectr[i] = _values[i];
   }
@@ -19,20 +19,25 @@ Vector::Vector(const double *_values, int _size)
 
 double &Vector::at(int _index)
 {
-  if(_index > -1 && _index < lenght)
+  if(_index > -1 && _index < vectr.size())
     return vectr[_index];
   return vectr[0];
 }
 
 double &Vector::operator[](int _index)
 {
-  if(_index > -1 && _index < lenght)
+  if(_index > -1 && _index < vectr.size())
     return vectr[_index];
   return vectr[0];
 }
 
 int Vector::size()
 {
-  return lenght;
+  return vectr.size();
 }
+
+Vector::~Vector()
+{
+}
+
 

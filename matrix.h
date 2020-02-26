@@ -6,6 +6,7 @@ class Matrix
 {
 public:
   Matrix(int _n, int _m);
+  ~Matrix();
   double& at(int index_first, int index_second);
   int n,m;
 private:

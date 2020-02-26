@@ -11,7 +11,7 @@ Fitness::Fitness(QWidget *parent) :
   ui->LaysSB->setRange(0,5);
   ui->NeyroSB->setRange(1,100);
   ui->AllMutRB->setChecked(true);
-  ui->PopulationSizeSB->setRange(2,100);
+  ui->PopulationSizeSB->setRange(2,5000);
   ui->SizeGenSB->setRange(5, 100000);
   ui->MutChanceSB->setRange(1, 100);
   ui->DeskSizeSB->setRange(25,100);
@@ -65,6 +65,7 @@ void Fitness::on_StartBatton_clicked()
     {
       snake[i] = new Snake(arr, ui->LaysSB->value(), ui->DeskSizeSB->value(), board, mut, ui->MutChanceSB->value());
     }
+    delete arr;
     //Меняем статус работы
     workStatus = true;
     //Устанавливаем количество поколений
@@ -84,6 +85,7 @@ void Fitness::on_StartBatton_clicked()
 void Fitness::life()
 {
   ui->progressBar->setRange(0,SizeGen);
+  double midlleLen = 0;
   int maxLen = 0;
   int numFirstParent = -1;
   int numSecondParent = -1;
@@ -91,6 +93,7 @@ void Fitness::life()
   {
     ui->progressBar->setValue(ui->progressBar->maximum() - SizeGen + 1);
     ui->PopulationLCD->display(ui->progressBar->maximum() - SizeGen);
+    midlleLen = 0;
     maxLen = 0;
     numFirstParent = 0;
     numSecondParent = 1;
@@ -98,19 +101,26 @@ void Fitness::life()
     for(int i(0); i < ui->PopulationSizeSB->value(); i++)
     {
       snake[i]->start();
-      while (!snake[i]->isGameOver())
+      int steps = 1500;
+      while (!snake[i]->isGameOver() && --steps > 0)
       {
         snake[i]->turn();
       }
+      midlleLen += snake[i]->len();
       if(snake[i]->len() > maxLen)
       {
         maxLen = snake[i]->len();
+        ui->RecordLCD->display(snake[i]->len());
         if(maxLen > ui->MaxRecordLCD->value())
           ui->MaxRecordLCD->display(maxLen);
         numSecondParent = numFirstParent;
         numFirstParent = i;
       }
     }
+
+    //Подсчет среднего результата
+    midlleLen /= ui->PopulationSizeSB->value();
+    ui->MiddleRecordLCD->display(midlleLen);
 
     //Вывод лучше особи
     snake[numFirstParent]->start();

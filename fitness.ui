@@ -15,58 +15,6 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="1">
-     <widget class="QGroupBox" name="groupBox_4">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="title">
-       <string>Информация</string>
-      </property>
-      <layout class="QFormLayout" name="formLayout">
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>Поколение</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_4">
-         <property name="text">
-          <string>Максимальный рекорд</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_5">
-         <property name="text">
-          <string>Средний рекорд</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLCDNumber" name="PopulationLCD"/>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLCDNumber" name="MaxRecordLCD"/>
-       </item>
-       <item row="2" column="1">
-        <widget class="QLCDNumber" name="MiddleRecordLCD"/>
-       </item>
-       <item row="5" column="0" colspan="2">
-        <widget class="QProgressBar" name="progressBar">
-         <property name="value">
-          <number>24</number>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
     <item row="0" column="2">
      <widget class="QGroupBox" name="verticalGroupBox">
       <property name="title">
@@ -209,6 +157,84 @@
       <layout class="QGridLayout" name="gridLayout_4">
        <item row="0" column="0">
         <layout class="QGridLayout" name="DeskLay"/>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QGroupBox" name="groupBox_4">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="title">
+       <string>Информация</string>
+      </property>
+      <layout class="QFormLayout" name="formLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Поколение</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>Максимальный рекорд</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>Средний рекорд</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLCDNumber" name="PopulationLCD">
+         <property name="styleSheet">
+          <string notr="true">background: rgb(85, 87, 83);</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLCDNumber" name="MaxRecordLCD">
+         <property name="styleSheet">
+          <string notr="true">background: rgb(85, 87, 83);</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLCDNumber" name="MiddleRecordLCD">
+         <property name="styleSheet">
+          <string notr="true">background: rgb(85, 87, 83);</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0" colspan="2">
+        <widget class="QProgressBar" name="progressBar">
+         <property name="value">
+          <number>24</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_10">
+         <property name="text">
+          <string>Текущий рекорд</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLCDNumber" name="RecordLCD">
+         <property name="styleSheet">
+          <string notr="true">background: rgb(85, 87, 83);</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>

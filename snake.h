@@ -44,7 +44,7 @@ public:
 
   Network* brain;
 private:
-  Vector &eye();
+  Vector eye();
   bool isBack(directon);
   void directionChange();
   void generateApple();

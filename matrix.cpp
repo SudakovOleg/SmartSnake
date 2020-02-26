@@ -16,6 +16,15 @@ Matrix::Matrix(int _n, int _m)
   }
 }
 
+Matrix::~Matrix()
+{
+  for (int i(0); i < n; n++)
+  {
+    delete [] mtx[i];
+  }
+  delete [] mtx;
+}
+
 double &Matrix::at(int index_first, int index_second)
 {
   double& temp = mtx[index_first][index_second];

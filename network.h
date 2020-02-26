@@ -13,9 +13,9 @@ public:
   //Конструктор
   Network(int* _sizes, int _layersN);
   //Прямое распространение
-  Vector &Forward(Vector *_input, int _lay = 0);
+  Vector Forward(Vector _input, int _lay = 0);
   //Испытание
-  Vector LifeStep(Vector _inp);
+  int LifeStep(const Vector& _inp);
   int getLayersN();
 private:
   int size;
