@@ -40,7 +40,7 @@ public:
   void turn();
   void show();
   void hide();
-  void cross(Snake* first_parent, Snake* second_parent);
+  void cross(QList<Snake*> snakes);
 
   Network* brain;
 private:

@@ -1,6 +1,7 @@
 #include "fitness.h"
 #include "ui_fitness.h"
 #include <QThread>
+#include <QList>
 
 //Конструктор
 Fitness::Fitness(QWidget *parent) :
@@ -85,18 +86,15 @@ void Fitness::on_StartBatton_clicked()
 void Fitness::life()
 {
   ui->progressBar->setRange(0,SizeGen);
+  QList<Snake*> snakes;
   double midlleLen = 0;
-  int maxLen = 0;
-  int numFirstParent = -1;
-  int numSecondParent = -1;
   while (workStatus && --SizeGen > 0)
   {
     ui->progressBar->setValue(ui->progressBar->maximum() - SizeGen + 1);
     ui->PopulationLCD->display(ui->progressBar->maximum() - SizeGen);
     midlleLen = 0;
-    maxLen = 0;
-    numFirstParent = 0;
-    numSecondParent = 1;
+    snakes.clear();
+    snakes.push_back(snake[0]);
     //Процесс игры
     for(int i(0); i < ui->PopulationSizeSB->value(); i++)
     {
@@ -107,14 +105,14 @@ void Fitness::life()
         snake[i]->turn();
       }
       midlleLen += snake[i]->len();
-      if(snake[i]->len() > maxLen)
+      if(snake[i]->len() >= snakes.first()->len())
       {
-        maxLen = snake[i]->len();
+        if(snake[i]->len() > snakes.first()->len())
+          snakes.clear();
         ui->RecordLCD->display(snake[i]->len());
-        if(maxLen > ui->MaxRecordLCD->value())
-          ui->MaxRecordLCD->display(maxLen);
-        numSecondParent = numFirstParent;
-        numFirstParent = i;
+        if(snake[i]->len() > ui->MaxRecordLCD->value())
+          ui->MaxRecordLCD->display(snake[i]->len());
+        snakes.push_back(snake[i]);
       }
     }
 
@@ -123,20 +121,20 @@ void Fitness::life()
     ui->MiddleRecordLCD->display(midlleLen);
 
     //Вывод лучше особи
-    snake[numFirstParent]->start();
-    snake[numFirstParent]->show();
-    while(!snake[numFirstParent]->isGameOver())
+    snakes.first()->start();
+    snakes.first()->show();
+    while(!snakes.first()->isGameOver())
     {
-      snake[numFirstParent]->turn();
+      snakes.first()->turn();
       QApplication::processEvents();
     }
-    snake[numFirstParent]->hide();
+    snakes.first()->hide();
 
     //Скрещивание
     for(int i(0); i < ui->PopulationSizeSB->value(); i++)
     {
-      if(i != numFirstParent && i != numSecondParent)
-        snake[i]->cross(snake[numFirstParent],  snake[numSecondParent]);
+      if(!snakes.contains(snake[i]))
+        snake[i]->cross(snakes);
     }
   }
 }

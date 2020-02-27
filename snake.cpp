@@ -240,7 +240,7 @@ void Snake::hide()
 }
 
 //Изменение весов путем скрещивания двух особей
-void Snake::cross(Snake *first_parent, Snake *second_parent)
+void Snake::cross(QList<Snake *> snakes)
 {
 //Скрещивание
   for (int i(0); i < brain->getLayersN(); i++)
@@ -249,14 +249,7 @@ void Snake::cross(Snake *first_parent, Snake *second_parent)
     {
       for(int y(0); y < brain->weights[i]->m; y++)
       {
-        if(brain->weights[i]->m%2 == 0)
-        {
-          brain->weights[i]->at(x,y) = first_parent->brain->weights[i]->at(x,y);
-        }
-        else
-        {
-          brain->weights[i]->at(x,y) = second_parent->brain->weights[i]->at(x,y);
-        }
+          brain->weights[i]->at(x,y) = snakes[rand()%snakes.size()]->brain->weights[i]->at(x,y);
       }
     }
   }
