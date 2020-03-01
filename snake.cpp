@@ -1,9 +1,10 @@
+#include <cmath>
 #include "snake.h"
 #include "vector.h"
 #include "matrix.h"
 #include "network.h"
 
-#define INPUT 12
+#define INPUT 16
 
 Snake::Snake(const int *_sizesNet, int _layersNet, int _board_size, Board* _board, mutation _mut, int ChanceMut)
 {
@@ -36,12 +37,12 @@ void Snake::start()
   cells->clear();
   //Создание начальной змейки
   cell head;
-  head.x = 3;
-  head.y = 3;
+  head.x = board_size/2;
+  head.y = board_size/2;
   cells->push_back(head);
   cell body;
-  body.x = 3;
-  body.y = 4;
+  body.x = (board_size/2)+1;
+  body.y = board_size/2;
   cells->push_back(body);
   //Генерация яблока
   generateApple();
@@ -72,7 +73,7 @@ bool Snake::isGameOver()
   //Если поймал хвост
   for(int i(1); i < cells->length(); i++)
   {
-    if(cells->at(0).x == cells->at(i).x && cells->at(0).y == cells->at(i).y)
+    if(cells->first().x == cells->at(i).x && cells->first().y == cells->at(i).y)
     {
       return true;
     }
@@ -83,7 +84,7 @@ bool Snake::isGameOver()
 //Метод проверки наличия яблока
 bool Snake::isEat()
 {
-  return (cells->at(0).x == apple->x && cells->at(0).y == apple->y);
+  return (cells->first().x == apple->x && cells->first().y == apple->y);
 }
 
 //Метод генерации яблока
@@ -170,32 +171,32 @@ void Snake::turn()
     case UP:
     {
         cell head;
-        head.x = cells->at(0).x;
-        head.y = cells->at(0).y - 1;
+        head.x = cells->first().x;
+        head.y = cells->first().y - 1;
         cells->push_front(head);
         break;
     }
     case LEFT:
     {
         cell head;
-        head.x = cells->at(0).x + 1;
-        head.y = cells->at(0).y;
+        head.x = cells->first().x + 1;
+        head.y = cells->first().y;
         cells->push_front(head);
         break;
     }
     case DOWN:
     {
         cell head;
-        head.x = cells->at(0).x;
-        head.y = cells->at(0).y + 1;
+        head.x = cells->first().x;
+        head.y = cells->first().y + 1;
         cells->push_front(head);
         break;
     }
     case RIGHT:
     {
         cell head;
-        head.x = cells->at(0).x - 1;
-        head.y = cells->at(0).y;
+        head.x = cells->first().x - 1;
+        head.y = cells->first().y;
         cells->push_front(head);
         break;
     }
@@ -280,71 +281,94 @@ Vector Snake::eye()
   Vector see(INPUT);
 
   int count = 0;
-  see.at(count++) = cells->at(0).x;
-  see.at(count++) = cells->at(0).y;
-  see.at(count++) = board_size - cells->at(0).x;
-  see.at(count++) = board_size - cells->at(0).y;
-  see.at(count++) = cells->at(0).x - apple->x;
-  see.at(count++) = cells->at(0).y - apple->y;
-  see.at(count++) = (board_size - cells->at(0).x)-(board_size - apple->x);
-  see.at(count++) = (board_size - cells->at(0).y)-(board_size - apple->y);;
+  //Ростояния до границы поля
+  see.at(count++) = -cells->first().x;
+  see.at(count++) = -cells->first().y;
+  see.at(count++) = -(board_size - cells->first().x);
+  see.at(count++) = -(board_size - cells->first().y);
+  //Растояния до яблока (по прямой)
+  see.at(count++) = cells->first().x - apple->x;
+  see.at(count++) = cells->first().y - apple->y;
+  see.at(count++) = (board_size - cells->first().x)-(board_size - apple->x);
+  see.at(count++) = (board_size - cells->first().y)-(board_size - apple->y);
+  //Растояния до яблока (по диагонали)
+  for(int i(0); i < 4; i++)
+    see.at(count+i) = 0;
+  if(apple->x < cells->first().x && apple->y < cells->first().y)
+  {
+    see.at(count) = std::min(cells->first().x - apple->x, cells->first().y - apple->y);
+  }
+  else if (apple->x < cells->first().x && apple->y > cells->first().y)
+  {
+    see.at(count + 1) = std::min(cells->first().x - apple->x, apple->y - cells->first().y);
+  }
+  else if (apple->x > cells->first().x && apple->y < cells->first().y)
+  {
+    see.at(count + 2) = std::min(apple->x - cells->first().x, cells->first().y - apple->y);
+  }
+  else if (apple->x > cells->first().x && apple->y > cells->first().y)
+  {
+    see.at(count + 3) = std::min(apple->x - cells->first().x, apple->y - cells->first().y);
+  }
+  count += 4;
+  //Растояния до хвоста
   see.at(count) = 0;
   //Up
-  for (int i(cells->at(0).y); i >= 0; i--)
+  for (int i(cells->first().y); i >= 0; i--)
   {
     bool flagBreak = false;
     for (int body(1); body < cells->size();body++)
-      if(cells->at(body).x == cells->at(0).y && cells->at(body).y == i)
+      if(cells->at(body).x == cells->first().y && cells->at(body).y == i)
       {
         flagBreak = true;
         break;
       }
-    see.at(count)++;
+    see.at(count)--;
     if(flagBreak)
       break;
   }
   see.at(++count) = 0;
   //Right
-  for (int i(cells->at(0).x); i < board_size; i++)
+  for (int i(cells->first().x); i < board_size; i++)
   {
     bool flagBreak = false;
     for (int body(1); body < cells->size();body++)
-      if(cells->at(body).x == i && cells->at(body).y == cells->at(0).y)
+      if(cells->at(body).x == i && cells->at(body).y == cells->first().y)
       {
         flagBreak = true;
         break;
       }
-    see.at(count)++;
+    see.at(count)--;
     if(flagBreak)
       break;
   }
   see.at(++count) = 0;
   //Down
-  for (int i(cells->at(0).y); i < board_size; i++)
+  for (int i(cells->first().y); i < board_size; i++)
   {
     bool flagBreak = false;
     for (int body(1); body < cells->size();body++)
-      if(cells->at(body).x == cells->at(0).y && cells->at(body).y == i)
+      if(cells->at(body).x == cells->first().y && cells->at(body).y == i)
       {
         flagBreak = true;
         break;
       }
-    see.at(count)++;
+    see.at(count)--;
     if(flagBreak)
       break;
   }
   see.at(++count) = 0;
   //Left
-  for (int i(cells->at(0).x); i >= 0; i--)
+  for (int i(cells->first().x); i >= 0; i--)
   {
     bool flagBreak = false;
     for (int body(1); body < cells->size();body++)
-      if(cells->at(body).x == i && cells->at(body).y == cells->at(0).y)
+      if(cells->at(body).x == i && cells->at(body).y == cells->first().y)
       {
         flagBreak = true;
         break;
       }
-    see.at(count)++;
+    see.at(count)--;
     if(flagBreak)
       break;
   }
@@ -396,34 +420,11 @@ void Snake::genMut()
       {
         if(rand()%100 < mutChance )
         {
-          if(rand()%2 == 0)
-          {
-            brain->weights[i]->at(x,y) += 0.001*(double)(rand()%1000);
-            if(brain->weights[i]->at(x,y) > 1)
-              brain->weights[i]->at(x,y) = 1;
-          }
-          else
-          {
-            brain->weights[i]->at(x,y) -= 0.001*(double)(rand()%1000);
-            if(brain->weights[i]->at(x,y) < -1)
-              brain->weights[i]->at(x,y) = -1;
-          }
+            brain->weights[i]->at(x,y) = .1*(double)(rand()%100);
         }
       }
     }
   }
-//  int placeX, placeY, placeZ;
-//  placeZ = rand()%brain->getLayersN();
-//  placeX = rand()%brain->weights[placeZ]->n;
-//  placeY = rand()%brain->weights[placeZ]->m;
-//  if(rand()%2 == 0)
-//  {
-//    brain->weights[placeZ]->at(placeX,placeY) = 0.001*(double)(rand()%1000);
-//  }
-//  else
-//  {
-//    brain->weights[placeZ]->at(placeX,placeY) = -0.001*(double)(rand()%1000);
-//  }
 }
 
 void Snake::allMut()

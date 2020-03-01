@@ -12,7 +12,6 @@ Network::Network(int* _sizes, int _layersN)
   {
     weights[i - 1] = new Matrix(_sizes[i], _sizes[i - 1]);
   }
-  srand(QApplication::applicationPid());
 }
 
 Vector Network::Forward(Vector _input, int lay)
@@ -28,7 +27,7 @@ Vector Network::Forward(Vector _input, int lay)
         for(int j(0); j < weights[lay]->m; j++)
           y += weights[lay]->at(i,j) * _input.at(j);
 
-        double temp = 1/(1+std::abs(y));
+        double temp = 1/(1+std::exp(-y));
         output.at(i) = temp;
       }
       return Forward(output, ++lay);
@@ -45,7 +44,7 @@ int Network::LifeStep(const Vector& _inp)
       if(newDir.at(i) > max)
       {
         max = newDir.at(i);
-        answer = i + 1;
+        answer = i;
       }
   return answer;
 }
