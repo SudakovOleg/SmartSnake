@@ -2,20 +2,22 @@
 #define NETWORK_H
 
 #include "matrix.h"
-#include "vector.h"
+#include "vector"
 #include <QObject>
+
+using namespace std;
 
 class Network
 {
 public:
   Matrix** weights;
-  Vector *last_answer;
+  vector<double> *last_answer;
   //Конструктор
   Network(int* _sizes, int _layersN);
   //Прямое распространение
-  Vector Forward(Vector _input, int _lay = 0);
+  vector<double> Forward(vector<double> _input, int _lay = 0);
   //Испытание
-  int LifeStep(const Vector& _inp);
+  int LifeStep(const vector<double>& _inp);
   int getLayersN();
 private:
   int size;

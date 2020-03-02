@@ -1,7 +1,7 @@
 #include "network.h"
 #include <QApplication>
 #include <cmath>
-#include "vector.h"
+#include "vector"
 #include "snake.h"
 
 Network::Network(int* _sizes, int _layersN)
@@ -14,11 +14,11 @@ Network::Network(int* _sizes, int _layersN)
   }
 }
 
-Vector Network::Forward(Vector _input, int lay)
+vector<double> Network::Forward(vector<double> _input, int lay)
 {
     if(lay < layersN)
     {
-      Vector output(weights[lay]->n);
+      vector<double> output(weights[lay]->n);
 
       for(int i(0); i < weights[lay]->n; i++)
       {
@@ -35,9 +35,9 @@ Vector Network::Forward(Vector _input, int lay)
     return _input;
 }
 
-int Network::LifeStep(const Vector& _inp)
+int Network::LifeStep(const vector<double>& _inp)
 {
-  Vector newDir = Forward(_inp);
+  vector<double> newDir = Forward(_inp);
   int answer;
   double max = -100;
   for(int i(0); i < newDir.size(); i++)

@@ -30,16 +30,14 @@ SOURCES += \
         fitness.cpp \
         matrix.cpp \
         network.cpp \
-        snake.cpp \
-        vector.cpp
+        snake.cpp
 
 HEADERS += \
         deskwnd.h \
         fitness.h \
         matrix.h \
         network.h \
-        snake.h \
-        vector.h
+        snake.h
 
 FORMS += \
         deskwnd.ui \

@@ -1,6 +1,6 @@
 #include <cmath>
 #include "snake.h"
-#include "vector.h"
+#include "vector"
 #include "matrix.h"
 #include "network.h"
 
@@ -276,9 +276,9 @@ void Snake::cross(QList<Snake *> snakes)
 }
 
 //Зрение
-Vector Snake::eye()
+vector<double> Snake::eye()
 {
-  Vector see(INPUT);
+  vector<double> see(INPUT);
 
   int count = 0;
   //Ростояния до границы поля

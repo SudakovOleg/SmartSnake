@@ -3,7 +3,7 @@
 
 #include <QList>
 #include "deskwnd.h"
-#include "vector.h"
+#include "vector"
 #include "network.h"
 
 struct cell
@@ -44,7 +44,7 @@ public:
 
   Network* brain;
 private:
-  Vector eye();
+  vector<double> eye();
   bool isBack(directon);
   void directionChange();
   void generateApple();
@@ -53,6 +53,8 @@ private:
   void xcrossMut();
   void genMut();
   void allMut();
+
+
   mutation mut;
   int mutChance;
   int board_size;
