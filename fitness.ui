@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>1012</width>
-    <height>557</height>
+    <height>576</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Fitness</string>
+   <string>SmartSnake</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -77,6 +77,26 @@
           <string>Настройки поколений и окружения</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_9">
+            <property name="text">
+             <string>Размер поля</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QSpinBox" name="SizeGenSB"/>
+          </item>
+          <item row="3" column="1">
+           <widget class="QSpinBox" name="DeskSizeSB"/>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>Количество особей</string>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="1">
            <widget class="QSpinBox" name="PopulationSizeSB"/>
           </item>
@@ -87,25 +107,15 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_2">
-            <property name="text">
-             <string>Количество особей</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QSpinBox" name="SizeGenSB"/>
+          <item row="2" column="1">
+           <widget class="QSpinBox" name="croosSB"/>
           </item>
           <item row="2" column="0">
-           <widget class="QLabel" name="label_9">
+           <widget class="QLabel" name="label_11">
             <property name="text">
-             <string>Размер поля</string>
+             <string>Число скрещиваемых особей</string>
             </property>
            </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QSpinBox" name="DeskSizeSB"/>
           </item>
          </layout>
         </widget>
@@ -180,45 +190,10 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_4">
-         <property name="text">
-          <string>Максимальный рекорд</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_5">
-         <property name="text">
-          <string>Средний рекорд</string>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="1">
         <widget class="QLCDNumber" name="PopulationLCD">
          <property name="styleSheet">
           <string notr="true">background: rgb(85, 87, 83);</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QLCDNumber" name="MaxRecordLCD">
-         <property name="styleSheet">
-          <string notr="true">background: rgb(85, 87, 83);</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QLCDNumber" name="MiddleRecordLCD">
-         <property name="styleSheet">
-          <string notr="true">background: rgb(85, 87, 83);</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0" colspan="2">
-        <widget class="QProgressBar" name="progressBar">
-         <property name="value">
-          <number>24</number>
          </property>
         </widget>
        </item>
@@ -233,6 +208,62 @@
         <widget class="QLCDNumber" name="RecordLCD">
          <property name="styleSheet">
           <string notr="true">background: rgb(85, 87, 83);</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>Максимальный рекорд</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLCDNumber" name="MaxRecordLCD">
+         <property name="styleSheet">
+          <string notr="true">background: rgb(85, 87, 83);</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>Средний рекорд</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLCDNumber" name="MiddleRecordLCD">
+         <property name="styleSheet">
+          <string notr="true">background: rgb(85, 87, 83);</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_12">
+         <property name="text">
+          <string>Прогресс поколения</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0" colspan="2">
+        <widget class="QProgressBar" name="LifePB">
+         <property name="value">
+          <number>0</number>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0" colspan="2">
+        <widget class="QProgressBar" name="progressBar">
+         <property name="value">
+          <number>24</number>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="label_13">
+         <property name="text">
+          <string>Общий прогресс</string>
          </property>
         </widget>
        </item>

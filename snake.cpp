@@ -420,7 +420,7 @@ void Snake::genMut()
       {
         if(rand()%100 < mutChance )
         {
-            brain->weights[i]->at(x,y) = .1*(double)(rand()%100);
+            brain->weights[i]->at(x,y) = .1*(double)(rand()%10);
         }
       }
     }

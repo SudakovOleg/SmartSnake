@@ -20,7 +20,7 @@ Fitness::Fitness(QWidget *parent) :
   ui->progressBar->setValue(0);
   ui->statusBar->showMessage("Готов к работе");
   board = nullptr;
-  srand(time(0));
+  srand(time(nullptr));
 }
 
 //Диструктор
@@ -98,6 +98,8 @@ void Fitness::life()
   while (workStatus && --SizeGen > 0)
   {
     ui->progressBar->setValue(ui->progressBar->maximum() - SizeGen + 1);
+    ui->LifePB->setRange(0, ui->PopulationSizeSB->value());
+    ui->LifePB->reset();
     ui->PopulationLCD->display(ui->progressBar->maximum() - SizeGen);
     midlleLen = 0;
     snakes.clear();
@@ -127,6 +129,8 @@ void Fitness::life()
           ui->MaxRecordLCD->display(snake[i]->len());
         snakes.push_back(snake[i]);
       }
+      ui->LifePB->setValue(ui->LifePB->value() + 1);
+      QApplication::processEvents();
     }
 
     //Подсчет среднего результата
@@ -135,7 +139,7 @@ void Fitness::life()
     tempStrForInfo[0].setNum(snakes.size());
     tempStrForInfo[1].setNum(snakes.first()->len());
 
-    //Вывод лучше особи каждые 20 поколений
+    //Вывод лучше особи каждые 10 поколений
     if(SizeGen%1 == 0)
     {
       ui->statusBar->showMessage("Димонстрация промежуточного результата");
