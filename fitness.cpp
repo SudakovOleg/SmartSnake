@@ -92,9 +92,11 @@ void Fitness::life()
 {
   ui->statusBar->showMessage("Провожу отсеивание");
   ui->progressBar->setRange(0,SizeGen);
+
   QList<Snake*> snakes;
   QString tempStrForInfo[2];
   double midlleLen = 0;
+
   while (workStatus && --SizeGen > 0)
   {
     ui->progressBar->setValue(ui->progressBar->maximum() - SizeGen + 1);
@@ -110,6 +112,7 @@ void Fitness::life()
       snake[i]->start();
       int steps = 200;
       int pastLen = 2;
+
       while (!snake[i]->isGameOver() && --steps > 0)
       {
         snake[i]->turn();
@@ -119,25 +122,33 @@ void Fitness::life()
           pastLen = snake[i]->len();
         }
       }
+
       midlleLen += snake[i]->len();
-      if(snake[i]->len() >= snakes.first()->len())
+      if(snake[i]->len() > snakes.back()->len() || snakes.size() < ui->croosSB->value())
       {
-        if(snake[i]->len() > snakes.first()->len())
-          snakes.clear();
-        ui->RecordLCD->display(snake[i]->len());
-        if(snake[i]->len() > ui->MaxRecordLCD->value())
-          ui->MaxRecordLCD->display(snake[i]->len());
-        snakes.push_back(snake[i]);
+        for(int n(0); n < snakes.size(); n++)
+        {
+          if(snakes[n]->len() < snake[i]->len())
+          {
+            snakes.insert(n, snake[i]);
+            break;
+          }
+        }
+        if(snakes.size() > ui->croosSB->value())
+          snakes.pop_back();
       }
       ui->LifePB->setValue(ui->LifePB->value() + 1);
       QApplication::processEvents();
     }
 
-    //Подсчет среднего результата
+    //Подсчет результатов
     midlleLen /= ui->PopulationSizeSB->value();
     ui->MiddleRecordLCD->display(midlleLen);
     tempStrForInfo[0].setNum(snakes.size());
     tempStrForInfo[1].setNum(snakes.first()->len());
+    ui->RecordLCD->display(snakes.first()->len());
+    if(snakes.first()->len() > ui->MaxRecordLCD->value())
+      ui->MaxRecordLCD->display(snakes.first()->len());
 
     //Вывод лучше особи каждые 10 поколений
     if(SizeGen%1 == 0)

@@ -25,6 +25,7 @@ private:
   Ui::Fitness *ui;
   int PopulationSize = 2;
   int SizeGen = 5;
+
   Board* board;
   bool workStatus = false;
   Snake** snake;
