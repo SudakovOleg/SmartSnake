@@ -16,6 +16,8 @@ class Fitness : public QMainWindow
 public:
   explicit Fitness(QWidget *parent = nullptr);
   void life();
+  void cross(const QList<Snake*>& best_s);
+  void test(Snake *s);
   ~Fitness();
 
 private slots:

@@ -93,9 +93,9 @@ void Fitness::life()
   ui->statusBar->showMessage("Провожу отсеивание");
   ui->progressBar->setRange(0,SizeGen);
 
-  QList<Snake*> snakes;
+  QList<Snake*> bestSnakes;
   QString tempStrForInfo[2];
-  double midlleLen = 0;
+  double totalLen = 0;
 
   while (workStatus && --SizeGen > 0)
   {
@@ -103,9 +103,10 @@ void Fitness::life()
     ui->LifePB->setRange(0, ui->PopulationSizeSB->value());
     ui->LifePB->reset();
     ui->PopulationLCD->display(ui->progressBar->maximum() - SizeGen);
-    midlleLen = 0;
-    snakes.clear();
-    snakes.push_back(snake[0]);
+    totalLen = 0;
+    bestSnakes.clear();
+    bestSnakes.push_back(snake[0]);
+
     //Процесс игры
     for(int i(0); i < ui->PopulationSizeSB->value(); i++)
     {
@@ -123,61 +124,73 @@ void Fitness::life()
         }
       }
 
-      midlleLen += snake[i]->len();
-      if(snake[i]->len() > snakes.back()->len() || snakes.size() < ui->croosSB->value())
+      totalLen += snake[i]->len();
+      if(snake[i]->len() > bestSnakes.back()->len() || bestSnakes.size() < ui->croosSB->value())
       {
-        for(int n(0); n < snakes.size(); n++)
+        for(int n(0); n < bestSnakes.size(); n++)
         {
-          if(snakes[n]->len() < snake[i]->len())
+          if(bestSnakes[n]->len() < snake[i]->len())
           {
-            snakes.insert(n, snake[i]);
+            bestSnakes.insert(n, snake[i]);
             break;
           }
         }
-        if(snakes.size() > ui->croosSB->value())
-          snakes.pop_back();
+        if(bestSnakes.size() > ui->croosSB->value())
+          bestSnakes.pop_back();
       }
       ui->LifePB->setValue(ui->LifePB->value() + 1);
       QApplication::processEvents();
     }
 
     //Подсчет результатов
-    midlleLen /= ui->PopulationSizeSB->value();
-    ui->MiddleRecordLCD->display(midlleLen);
-    tempStrForInfo[0].setNum(snakes.size());
-    tempStrForInfo[1].setNum(snakes.first()->len());
-    ui->RecordLCD->display(snakes.first()->len());
-    if(snakes.first()->len() > ui->MaxRecordLCD->value())
-      ui->MaxRecordLCD->display(snakes.first()->len());
+    totalLen /= ui->PopulationSizeSB->value();
+    ui->MiddleRecordLCD->display(totalLen);
+    tempStrForInfo[0].setNum(bestSnakes.size());
+    tempStrForInfo[1].setNum(bestSnakes.first()->len());
+    ui->RecordLCD->display(bestSnakes.first()->len());
+    if(bestSnakes.first()->len() > ui->MaxRecordLCD->value())
+      ui->MaxRecordLCD->display(bestSnakes.first()->len());
 
-    //Вывод лучше особи каждые 10 поколений
-    if(SizeGen%1 == 0)
-    {
-      ui->statusBar->showMessage("Димонстрация промежуточного результата");
-      snakes.first()->start();
-      snakes.first()->show();
-      int steps = 200;
-      int pastLen = 2;
-      while(!snakes.first()->isGameOver()&& --steps > 0)
-      {
-        snakes.first()->turn();
-        if(snakes.first()->len() > pastLen)
-        {
-          steps += 200;
-          pastLen = snakes.first()->len();
-        }
-        QApplication::processEvents();
-      }
-      snakes.first()->hide();
-    }
+    ui->statusBar->showMessage("Димонстрация промежуточного результата");
+    test(bestSnakes.first());
 
     ui->statusBar->showMessage("Провожу скрещивание " + tempStrForInfo[0] + " особей с длинной " + tempStrForInfo[1]);
-    //Скрещивание
-    for(int i(0); i < ui->PopulationSizeSB->value(); i++)
+    cross(bestSnakes);
+  }
+}
+
+//Метод скрещивания
+void Fitness::cross(const QList<Snake*>& best_s)
+{
+  //Скрещивание
+  for(int i(0); i < ui->PopulationSizeSB->value(); i++)
+  {
+    if(!best_s.contains(snake[i]))
+      snake[i]->cross(best_s);
+  }
+  QApplication::processEvents();
+}
+
+//Метод тестирования
+void Fitness::test(Snake *s)
+{
+  //Вывод лучше особи каждые 10 поколений
+  if(SizeGen%1 == 0)
+  {
+    s->start();
+    s->show();
+    int steps = 200;
+    int pastLen = 2;
+    while(!s->isGameOver()&& --steps > 0)
     {
-      if(!snakes.contains(snake[i]))
-        snake[i]->cross(snakes);
+      s->turn();
+      if(s->len() > pastLen)
+      {
+        steps += 200;
+        pastLen = s->len();
+      }
+      QApplication::processEvents();
     }
-    QApplication::processEvents();
+    s->hide();
   }
 }
