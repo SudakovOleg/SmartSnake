@@ -1,4 +1,6 @@
+#include <random>
 #include <cmath>
+#include <algorithm>
 #include "snake.h"
 #include "vector"
 #include "matrix.h"
@@ -241,8 +243,10 @@ void Snake::hide()
 }
 
 //Изменение весов путем скрещивания двух особей
-void Snake::cross(QList<Snake *> snakes)
+void Snake::cross(QList<Snake *> snakes, std::vector<int> id)
 {
+  int count = 0;
+  std::shuffle(id.begin(),id.end(), std::mt19937(std::random_device()()));
 //Скрещивание
   for (int i(0); i < brain->getLayersN(); i++)
   {
@@ -250,7 +254,7 @@ void Snake::cross(QList<Snake *> snakes)
     {
       for(int y(0); y < brain->weights[i]->m; y++)
       {
-          brain->weights[i]->at(x,y) = snakes[rand()%snakes.size()]->brain->weights[i]->at(x,y);
+          brain->weights[i]->at(x,y) = snakes[id[count++]]->brain->weights[i]->at(x,y);
       }
     }
   }

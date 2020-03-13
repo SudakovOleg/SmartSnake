@@ -11,6 +11,7 @@ Network::Network(int* _sizes, int _layersN)
   for(int i(1); i < _layersN; i++)
   {
     weights[i - 1] = new Matrix(_sizes[i], _sizes[i - 1]);
+    params += _sizes[i] * _sizes[i - 1];
   }
 }
 
@@ -52,4 +53,9 @@ int Network::LifeStep(const vector<double>& _inp)
 int Network::getLayersN()
 {
   return layersN;
+}
+
+int Network::getParamsCount()
+{
+  return params;
 }

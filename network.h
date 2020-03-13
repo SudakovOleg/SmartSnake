@@ -19,10 +19,12 @@ public:
   //Испытание
   int LifeStep(const vector<double>& _inp);
   int getLayersN();
+  int getParamsCount();
 private:
   int size;
   int* sizes;
   int layersN;
+  int params;
 };
 
 #endif // NETWORK_H

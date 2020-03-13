@@ -40,7 +40,7 @@ public:
   void turn();
   void show();
   void hide();
-  void cross(QList<Snake*> snakes);
+  void cross(QList<Snake*> snakes, std::vector<int> id);
 
   Network* brain;
 private:
@@ -53,7 +53,6 @@ private:
   void xcrossMut();
   void genMut();
   void allMut();
-
 
   mutation mut;
   int mutChance;

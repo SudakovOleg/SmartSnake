@@ -94,7 +94,6 @@ void Fitness::life()
   ui->progressBar->setRange(0,SizeGen);
 
   QList<Snake*> bestSnakes;
-  QString tempStrForInfo[2];
   double totalLen = 0;
 
   while (workStatus && --SizeGen > 0)
@@ -125,13 +124,13 @@ void Fitness::life()
       }
 
       totalLen += snake[i]->len();
-      if(snake[i]->len() > bestSnakes.back()->len() || bestSnakes.size() < ui->croosSB->value())
+      if(snake[i]->len() > bestSnakes.back()->len())
       {
         for(int n(0); n < bestSnakes.size(); n++)
         {
           if(bestSnakes[n]->len() < snake[i]->len())
           {
-            bestSnakes.insert(n, snake[i]);
+            bestSnakes.insert(n - 1, snake[i]);
             break;
           }
         }
@@ -145,8 +144,6 @@ void Fitness::life()
     //Подсчет результатов
     totalLen /= ui->PopulationSizeSB->value();
     ui->MiddleRecordLCD->display(totalLen);
-    tempStrForInfo[0].setNum(bestSnakes.size());
-    tempStrForInfo[1].setNum(bestSnakes.first()->len());
     ui->RecordLCD->display(bestSnakes.first()->len());
     if(bestSnakes.first()->len() > ui->MaxRecordLCD->value())
       ui->MaxRecordLCD->display(bestSnakes.first()->len());
@@ -154,7 +151,6 @@ void Fitness::life()
     ui->statusBar->showMessage("Димонстрация промежуточного результата");
     test(bestSnakes.first());
 
-    ui->statusBar->showMessage("Провожу скрещивание " + tempStrForInfo[0] + " особей с длинной " + tempStrForInfo[1]);
     cross(bestSnakes);
   }
 }
@@ -162,11 +158,27 @@ void Fitness::life()
 //Метод скрещивания
 void Fitness::cross(const QList<Snake*>& best_s)
 {
+  double totalLen = 0;
+  std::vector<int> index_to_cross(best_s.first()->brain->getParamsCount());
+  for(auto s : best_s)
+  {
+    totalLen += s->len();
+  }
+
+  int count = 0;
+  for(int i(0); i < best_s.size(); i++)
+  {
+    int part = (index_to_cross.size() * ((double)best_s[i]->len()/totalLen));
+    for(int j(0); j < part; j++)
+    {
+      index_to_cross[count++] = i;
+    }
+  }
   //Скрещивание
   for(int i(0); i < ui->PopulationSizeSB->value(); i++)
   {
     if(!best_s.contains(snake[i]))
-      snake[i]->cross(best_s);
+      snake[i]->cross(best_s,index_to_cross);
   }
   QApplication::processEvents();
 }
