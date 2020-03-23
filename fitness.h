@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "deskwnd.h"
 #include "snake.h"
+#include "graphwidget.h"
 
 namespace Ui {
   class Fitness;
@@ -29,6 +30,7 @@ private:
   int SizeGen = 5;
 
   Board* board;
+  GraphWidget *GraphMidRecord;
   bool workStatus = false;
   Snake** snake;
 };

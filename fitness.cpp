@@ -2,6 +2,7 @@
 #include "ui_fitness.h"
 #include <QThread>
 #include <QList>
+#include "graphwidget.h"
 
 //Конструктор
 Fitness::Fitness(QWidget *parent) :
@@ -44,6 +45,8 @@ void Fitness::on_StartBatton_clicked()
       board = new Board(this, ui->DeskSizeSB->value());
       ui->DeskLay->addWidget(board);
     }
+    GraphMidRecord = new GraphWidget(Range(0,ui->SizeGenSB->value()/10),Range(0,50),this);
+    ui->GraphGB->layout()->addWidget(GraphMidRecord);
     //Создаем массив для нейросети
     int* arr = new int;
     for(int i(0); i < ui->LaysSB->value(); i++)
@@ -83,6 +86,7 @@ void Fitness::on_StartBatton_clicked()
     //Переименовываем кнопку
     ui->StartBatton->setText("Старт");
     ui->statusBar->showMessage("Остановка");
+    delete GraphMidRecord;
     workStatus = false;
   }
 }
@@ -144,6 +148,7 @@ void Fitness::life()
     //Подсчет результатов
     totalLen /= ui->PopulationSizeSB->value();
     ui->MiddleRecordLCD->display(totalLen);
+    GraphMidRecord->addElement((ui->SizeGenSB->value() - SizeGen)/10,totalLen);
     ui->RecordLCD->display(bestSnakes.first()->len());
     if(bestSnakes.first()->len() > ui->MaxRecordLCD->value())
       ui->MaxRecordLCD->display(bestSnakes.first()->len());

@@ -10,9 +10,9 @@
 struct Range
 {
   Range()= default;
-  Range(double begin, double end) { this->begin = begin; this->end = end;}
-  double begin;
-  double end;
+  Range(int begin, int end) { this->begin = begin; this->end = end;}
+  int begin;
+  int end;
 };
 
 struct ElementOfDate
@@ -23,12 +23,12 @@ struct ElementOfDate
   double yComponent;
 };
 
-class PloitWidget : public QWidget
+class GraphWidget : public QWidget
 {
   Q_OBJECT
 public:
-  PloitWidget(Range xR, Range yR,QWidget *parent = nullptr);
-  ~PloitWidget();
+  GraphWidget(Range xR, Range yR,QWidget *parent = nullptr);
+  ~GraphWidget();
 
   void paintEvent(QPaintEvent *);
   void addElement(QPoint p);

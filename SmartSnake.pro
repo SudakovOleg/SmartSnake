@@ -26,6 +26,7 @@ CONFIG += c++11
 
 SOURCES += \
         deskwnd.cpp \
+        graphwidget.cpp \
         main.cpp \
         fitness.cpp \
         matrix.cpp \
@@ -35,6 +36,7 @@ SOURCES += \
 HEADERS += \
         deskwnd.h \
         fitness.h \
+        graphwidget.h \
         matrix.h \
         network.h \
         snake.h
