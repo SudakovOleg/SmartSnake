@@ -11,7 +11,7 @@ Matrix::Matrix(int _n, int _m)
     mtx[i] = new double[m];
     for (int j(0); j < m; j++)
     {
-      mtx[i][j] = 1. * (rand()%10);
+      mtx[i][j] = 0.1 * (rand()%10);
     }
   }
 }

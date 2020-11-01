@@ -20,6 +20,7 @@ public:
   void test(Snake *s);
   ~Fitness();
 
+  void gameProccess(Snake *snake);
 private slots:
   void on_StartBatton_clicked();
 
