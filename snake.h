@@ -40,7 +40,9 @@ public:
   void turn();
   void show();
   void hide();
-  void cross(QList<Snake*> snakes, std::vector<int> id);
+  void cross(QList<Snake*> snakes, QVector<int> id);
+  //Вывод весов нс в консольы
+  void debugPrint();
 
   Network* brain;
 private:

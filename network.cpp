@@ -4,14 +4,15 @@
 #include "vector"
 #include "snake.h"
 
-Network::Network(int* _sizes, int _layersN)
+Network::Network(QVector<int> *_sizes)
 {
-  layersN = _layersN - 1;
-  weights = new Matrix*[layersN];
-  for(int i(1); i < _layersN; i++)
+  params = 0;
+  layersN = _sizes->size() - 1;
+  weights = new Matrix*[_sizes->size()];
+  for(int i(1); i < _sizes->size(); i++)
   {
-    weights[i - 1] = new Matrix(_sizes[i], _sizes[i - 1]);
-    params += _sizes[i] * _sizes[i - 1];
+    weights[i - 1] = new Matrix(_sizes->at(i), _sizes->at(i - 1));
+    params += _sizes->at(i) * _sizes->at(i - 1);
   }
 }
 

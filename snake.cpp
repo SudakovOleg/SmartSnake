@@ -5,19 +5,20 @@
 #include "vector"
 #include "matrix.h"
 #include "network.h"
+#include <QDebug>
 
 #define INPUT 16
 
 Snake::Snake(const int *_sizesNet, int _layersNet, int _board_size, Board* _board, mutation _mut, int ChanceMut)
 {
-int _sizes[_layersNet + 2];
+QVector<int> _sizes(_layersNet + 2);
 _sizes[0] = INPUT;
 _sizes[_layersNet + 1] = 4;
 for(int i(1); i < _layersNet + 1; i++)
 {
     _sizes[i] = _sizesNet[i-1];
 }
-brain = new Network(_sizes,_layersNet + 2);
+brain = new Network(&_sizes);
 board_size = _board_size;
 board = _board;
 mut = _mut;
@@ -57,6 +58,26 @@ void Snake::start()
     board->clear();
     burnOnBord();
   }
+}
+
+//Вывод весов нс в консоль
+void Snake::debugPrint()
+{
+    QString buff;
+    for (int i(0); i < brain->getLayersN(); i++)
+    {
+      for (int x(0); x < brain->weights[i]->n; x++)
+      {
+        for(int y(0); y < brain->weights[i]->m; y++)
+        {
+            buff += QString::number(brain->weights[i]->at(x,y));
+            buff += ' ';
+        }
+      }
+      qDebug() << buff;
+      buff.clear();
+    }
+    qDebug() << "__________";
 }
 
 //Проверка на окончание игры
@@ -243,7 +264,7 @@ void Snake::hide()
 }
 
 //Изменение весов путем скрещивания двух особей
-void Snake::cross(QList<Snake *> snakes, std::vector<int> id)
+void Snake::cross(QList<Snake *> snakes, QVector<int> id)
 {
   int count = 0;
   std::shuffle(id.begin(),id.end(), std::mt19937(std::random_device()()));

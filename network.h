@@ -13,7 +13,7 @@ public:
   Matrix** weights;
   vector<double> *last_answer;
   //Конструктор
-  Network(int* _sizes, int _layersN);
+  Network(QVector<int> *_sizes);
   //Прямое распространение
   vector<double> Forward(vector<double> _input, int _lay = 0);
   //Испытание
@@ -21,7 +21,7 @@ public:
   int getLayersN();
   int getParamsCount();
 private:
-  int size;
+  //int size;
   int* sizes;
   int layersN;
   int params;

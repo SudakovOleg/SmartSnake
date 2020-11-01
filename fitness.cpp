@@ -130,7 +130,7 @@ void Fitness::life()
         {
           if(bestSnakes[n]->len() < snake[i]->len())
           {
-            bestSnakes.insert(n - 1, snake[i]);
+            bestSnakes.insert(n, snake[i]);
             break;
           }
         }
@@ -159,7 +159,7 @@ void Fitness::life()
 void Fitness::cross(const QList<Snake*>& best_s)
 {
   double totalLen = 0;
-  std::vector<int> index_to_cross(best_s.first()->brain->getParamsCount());
+  QVector<int> index_to_cross(best_s.first()->brain->getParamsCount());
   for(auto s : best_s)
   {
     totalLen += s->len();
@@ -189,6 +189,7 @@ void Fitness::test(Snake *s)
   //Вывод лучше особи каждые 10 поколений
   if(SizeGen%1 == 0)
   {
+    s->debugPrint();
     s->start();
     s->show();
     int steps = 200;
